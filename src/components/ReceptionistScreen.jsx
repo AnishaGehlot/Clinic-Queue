@@ -21,12 +21,14 @@ export default function ReceptionistScreen() {
 
   useEffect(() => {
     const doctorsRef = ref(db, "doctors");
+    // eslint-disable-next-line
     onValue(doctorsRef, (snapshot) => {
       const data = snapshot.val();
       const list = data ? Object.values(data) : [];
       setDoctors(list);
       if (list.length > 0 && !selectedDoctor) setSelectedDoctor(list[0]);
     });
+  // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -57,7 +59,7 @@ export default function ReceptionistScreen() {
   const addDoctor = () => {
     const trimmed = newDoctorName.trim();
     if (trimmed === "") return;
-    const doctorKey = trimmed.replace(/[.#$/\[\]]/g, "");
+    const doctorKey = trimmed.replace(/[.#$[\]]/g, "");
     set(ref(db, "doctors/" + doctorKey), trimmed);
     setSelectedDoctor(trimmed);
     setNewDoctorName("");
@@ -97,7 +99,6 @@ export default function ReceptionistScreen() {
     });
     remove(ref(db, "queues/" + selectedDoctor + "/" + id));
 
-    // Auto call next
     const remaining = queue.filter(q => q.id !== id);
     if (remaining.length > 0) {
       const next = remaining[0];
@@ -148,7 +149,6 @@ export default function ReceptionistScreen() {
         </div>
       )}
 
-      {/* Now Serving Banner */}
       {nowServing && (
         <div style={styles.nowServingBanner}>
           <div style={styles.nowServingLabel}>🟢 Now Serving</div>
@@ -187,7 +187,6 @@ export default function ReceptionistScreen() {
             <span style={styles.queueCount}>{queue.length}</span>
           </div>
 
-          {/* Call Next Button */}
           {queue.length > 0 && (
             <button onClick={callNext} style={styles.callNextBtn}>
               📢 Call Next Patient
