@@ -1,25 +1,58 @@
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route, Link, useLocation } from "react-router-dom";
+import ReceptionistScreen from "./components/ReceptionistScreen";
+import PatientScreen from "./components/PatientScreen";
+import StatusScreen from "./components/StatusScreen";
+import AnalyticsScreen from "./components/AnalyticsScreen";
+import "./App.css";
 
-function App() {
+function Layout({ children }) {
+  const location = useLocation();
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div className="app">
+      <div className="tab-bar">
+        <Link
+          to="/receptionist"
+          className={location.pathname === "/receptionist" ? "tab active" : "tab"}
         >
-          Learn React
-        </a>
-      </header>
+          🏥 Reception
+        </Link>
+        <Link
+          to="/patient"
+          className={location.pathname === "/patient" || location.pathname === "/" ? "tab active" : "tab"}
+        >
+          🪑 Queue
+        </Link>
+        <Link
+          to="/status"
+          className={location.pathname === "/status" ? "tab active" : "tab"}
+        >
+          🔍 Status
+        </Link>
+        <Link
+          to="/analytics"
+          className={location.pathname === "/analytics" ? "tab active" : "tab"}
+        >
+          📊 Stats
+        </Link>
+      </div>
+      {children}
     </div>
   );
 }
 
-export default App;
+export default function App() {
+  return (
+    <BrowserRouter>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<PatientScreen />} />
+          <Route path="/patient" element={<PatientScreen />} />
+          <Route path="/receptionist" element={<ReceptionistScreen />} />
+          <Route path="/status" element={<StatusScreen />} />
+          <Route path="/analytics" element={<AnalyticsScreen />} />
+        </Routes>
+      </Layout>
+    </BrowserRouter>
+  );
+}
